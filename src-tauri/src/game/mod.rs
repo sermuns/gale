@@ -96,7 +96,7 @@ pub async fn update_list_task(app: &AppHandle) -> Result<()> {
     });
 
     let cache = GamesCache {
-        date: date,
+        date,
         games,
     };
 
