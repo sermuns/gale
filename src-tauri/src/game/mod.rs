@@ -30,8 +30,7 @@ const GITHUB_API_URL: &str =
 const GAMES_JSON_URL: &str =
     "https://raw.githubusercontent.com/Kesomannen/gale/refs/heads/master/src-tauri/games.json";
 
-const BUNDLED_GAMES_JSON: &str =
-    include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/", "games.json"));
+const BUNDLED_GAMES_JSON: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/games.json"));
 
 const BUILD_TIME: &str = env!("BUILD_TIME");
 
@@ -75,6 +74,11 @@ fn get_cached_games() -> Result<GamesCache<'static>> {
 }
 
 pub async fn update_list_task(app: &AppHandle) -> Result<()> {
+    if cfg!(debug_assertions) {
+        info!("skipping games list update in debug mode");
+        return Ok(());
+    }
+
     let str = app
         .http()
         .get(GAMES_JSON_URL)
